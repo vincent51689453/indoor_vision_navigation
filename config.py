@@ -6,7 +6,7 @@ training_csv_path = './datasets/'+ dataset_name +'/train/train.csv'
 training_img_path = './datasets/'+ dataset_name +'/train/'
 
 # Hyperparameters
-param_batch_size = 8
+param_batch_size = 64
 param_learning_rate = 0.001
 num_epoches = 20000
 
