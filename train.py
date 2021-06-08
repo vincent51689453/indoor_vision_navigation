@@ -1,3 +1,4 @@
+# Deep learning packages
 import torch
 from torch import nn,optim
 import torch.nn.functional as F
@@ -6,61 +7,36 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision import datasets
 from torchvision.transforms import ToTensor
+
+# System packages
 import os
 
+# Custom packages
 import dataclass
+import config
+import network
 
-testing_csv_path = './datasets/gazebo_ic382/test/test.csv'
-testing_img_path = './datasets/gazebo_ic382/test/'
-
-training_csv_path = './datasets/gazebo_ic382/train/train.csv'
-training_img_path = './datasets/gazebo_ic382/train/'
-
-param_batch_size = 8
-param_learning_rate = 1e-2
-num_epoches = 20
 
 # Dataset preparation
-testing_set = dataclass.testing_dataset(testing_csv_path,testing_img_path)
-training_set = dataclass.training_dataset(training_csv_path, training_img_path)
+testing_set = dataclass.testing_dataset(config.testing_csv_path,config.testing_img_path)
+training_set = dataclass.training_dataset(config.training_csv_path, config.training_img_path)
 
-train_loader = DataLoader(training_set, batch_size=param_batch_size, shuffle=True)
-test_loader = DataLoader(testing_set,batch_size=param_batch_size,shuffle=True)
+train_loader = DataLoader(training_set, batch_size=config.param_batch_size, shuffle=True)
+test_loader = DataLoader(testing_set,batch_size=config.param_batch_size,shuffle=True)
 
-# Convolutional Neural Network
-class CNN(nn.Module):
-    def __init__(self,in_dim,n_class):
-        super(CNN,self).__init__()
-        self.conv = nn.Sequential(
-            nn.Conv2d(in_dim,6,kernel_size=3,stride=1,padding=1),   
-            nn.ReLU(True),        
-            nn.MaxPool2d(2,2),    
-            nn.Conv2d(6,16,5,stride=1,padding=0), 
-            nn.ReLU(True),
-            nn.MaxPool2d(2,2)    
-        )
-        self.fc = nn.Sequential(  
-            nn.Linear(576384,120),
-            nn.Linear(120,84),
-            nn.Linear(84,n_class)
-        )
-    def forward(self, x):
-        out = self.conv(x)      #out shape(batch,16,5,5)
-        out = out.view(out.size(0),-1)   #out shape(batch,400)
-        out = self.fc(out)      #out shape(batch,10)
-        return out
+# Create a CNN
+trail_net = network.CNN(config.input_channel,config.output_channel)
 
-network = CNN(3,10)
-
+# CUDA support
 if torch.cuda.is_available():       
-     network = network.cuda()       
+    trail_net = trail_net.cuda()       
 
 # Define Loss and Optimization 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(network.parameters(), lr=param_learning_rate)
+optimizer = optim.Adam(trail_net.parameters(), lr=config.param_learning_rate)
 
 # Start Training
-for epoch in range(num_epoches):
+for epoch in range(config.num_epoches):
     print('epoch{}'.format(epoch+1))
     print('*'*10)
 
@@ -76,7 +52,7 @@ for epoch in range(num_epoches):
             img = Variable(img)
             label = Variable(label)
         img = img.float()
-        output = network(img)
+        output = trail_net(img)
         loss = criterion(output,label)
         running_loss += loss.item() * label.size(0)
         _, pred = torch.max(output,1)
