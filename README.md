@@ -13,6 +13,9 @@ python3 shuffle_data.py
 ```
 
 ![image](https://github.com/vincent51689453/indoor_vision_navigation/blob/main/git_image/data_shuffle.png)
+
+**However, you need to modify the csv file manually to label each image in the current stage.**
+
 ## Network Output
 
 Class 0: Forward
