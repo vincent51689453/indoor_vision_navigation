@@ -49,7 +49,7 @@ for epoch in range(config.num_epoches):
     # Training at each epoch
     for i,data in enumerate(train_loader,1):
         img,label = data
-
+     
         #Normalization
         img = img/255
 
@@ -87,6 +87,7 @@ for epoch in range(config.num_epoches):
         writer.add_scalar('Train/Loss',scalar_loss,epoch)
         writer.add_scalar('Train/Accuracy',scalar_accuracy,epoch)
         writer.flush()
+
 
     # Testing at each epoch
 
