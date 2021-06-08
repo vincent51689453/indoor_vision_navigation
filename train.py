@@ -11,7 +11,6 @@ from torch.utils.tensorboard import SummaryWriter
 
 # System packages
 import os
-import cv2
 
 # Custom packages
 import dataclass
