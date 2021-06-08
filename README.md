@@ -12,8 +12,7 @@ After all the parameters are ready, you may simply execute the following.
 python3 shuffle_data.py
 ```
 
-![image]
-(https://github.com/vincent51689453/indoor_vision_navigation/blob/main/git_image/data_shuffle.png)
+![image](https://github.com/vincent51689453/indoor_vision_navigation/blob/main/git_image/data_shuffle.png)
 ## Network Output
 
 Class 0: Forward
