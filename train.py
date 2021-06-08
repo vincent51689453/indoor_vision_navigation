@@ -43,16 +43,23 @@ for epoch in range(config.num_epoches):
     running_loss = 0.0
     running_acc = 0.0
 
+    # Training
     for i,data in enumerate(train_loader,1):
         img,label = data
+
+        # Add CUDA support
         if torch.cuda.is_available():
             img = Variable(img).cuda()
             label = Variable(label).cuda()
         else:
             img = Variable(img)
             label = Variable(label)
+
+        # Network IN/OUT
         img = img.float()
         output = trail_net(img)
+
+        # Loss evaluations
         loss = criterion(output,label)
         running_loss += loss.item() * label.size(0)
         _, pred = torch.max(output,1)
