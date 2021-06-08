@@ -7,6 +7,7 @@ from torch.utils.data import DataLoader
 from torchvision import transforms
 from torchvision import datasets
 from torchvision.transforms import ToTensor
+from torch.utils.tensorboard import SummaryWriter 
 
 # System packages
 import os
@@ -17,6 +18,8 @@ import dataclass
 import config
 import network
 
+# Tensorboard writer
+writer = SummaryWriter('./log')
 
 # Dataset preparation
 testing_set = dataclass.testing_dataset(config.testing_csv_path,config.testing_img_path)
@@ -24,8 +27,6 @@ training_set = dataclass.training_dataset(config.training_csv_path, config.train
 
 train_loader = DataLoader(training_set, batch_size=config.param_batch_size, shuffle=True)
 test_loader = DataLoader(testing_set,batch_size=config.param_batch_size,shuffle=True)
-
-
 
 # Create a CNN
 navigation_net = network.CNN(config.input_channel,config.output_channel)
@@ -79,8 +80,14 @@ for epoch in range(config.num_epoches):
 
         size_training_set = training_set.__len__()
 
-        print('Finish {} epoch,Loss:{:.6f},Acc:{:.6f}'.format(epoch+1,running_loss/(size_training_set),\
-            running_acc/size_training_set))
+        scalar_loss = running_loss/size_training_set
+        scalar_accuracy = running_acc/size_training_set
+
+        print('Finish {} epoch,Loss:{:.6f},Acc:{:.6f}'.format(epoch+1,scalar_loss,scalar_accuracy))
+        # Write to tensorboard
+        writer.add_scalar('Train/Loss',scalar_loss,epoch)
+        writer.add_scalar('Train/Accuracy',scalar_accuracy,epoch)
+        writer.flush()
 
     # Testing at each epoch
 
@@ -94,7 +101,7 @@ for epoch in range(config.num_epoches):
 
         #Normalization
         img = img/255
-        
+
         # Add CUDA support
         if torch.cuda.is_available():
             img = Variable(img).cuda()
@@ -115,6 +122,11 @@ for epoch in range(config.num_epoches):
         eval_acc += num_correct.item()
 
         size_testing_set = testing_set.__len__()
+        scalar_loss = eval_loss/size_testing_set
+        scalar_accuracy = eval_acc/size_testing_set
 
-        print('Test Loss: {:.6f}, Acc: {:.6f}\r\n'.format(eval_loss/size_testing_set,eval_acc/size_testing_set))
-
+        print('Test Loss: {:.6f}, Acc: {:.6f}\r\n'.format(scalar_loss,scalar_accuracy))
+        # Write to tensorboard
+        writer.add_scalar('Test/Loss',scalar_loss,epoch)
+        writer.add_scalar('Test/Accuracy',scalar_accuracy,epoch)
+        writer.flush()
