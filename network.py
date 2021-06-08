@@ -12,15 +12,15 @@ class CNN(nn.Module):
     def __init__(self,in_dim,n_class):
         super(CNN,self).__init__()
         self.conv = nn.Sequential(
-            nn.Conv2d(in_dim,6,kernel_size=3,stride=1,padding=1),   
+            nn.Conv2d(in_dim,6,kernel_size=5),   
             nn.ReLU(True),        
             nn.MaxPool2d(2,2),    
-            nn.Conv2d(6,16,5,stride=1,padding=0), 
+            nn.Conv2d(6,16,kernel_size=5), 
             nn.ReLU(True),
             nn.MaxPool2d(2,2)    
         )
         self.fc = nn.Sequential(  
-            nn.Linear(576384,120),
+            nn.Linear(33177600,120),
             nn.Linear(120,84),
             nn.Linear(84,n_class)
         )

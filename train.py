@@ -49,7 +49,7 @@ for epoch in range(config.num_epoches):
     # Training at each epoch
     for i,data in enumerate(train_loader,1):
         img,label = data
-     
+        print("Labels:",labels)
         #Normalization
         img = img/255
 
@@ -64,7 +64,7 @@ for epoch in range(config.num_epoches):
         # Network IN/OUT
         img = img.float()
         output = navigation_net(img)
-
+        print("Raw Network Output:",output)
         # Loss evaluations
         loss = criterion(output,label)
         running_loss += loss.item() * label.size(0)
