@@ -2,7 +2,7 @@
 It is a CNN approach to achieve indoor navigation.
 
 ## Training
-Assuem the name of your dataset called "abc", you need to put all images into datasets/abc/temp. Then, create two empty directories named as train and test which contain an empty train.csv or test.csv respectively.
+Assuem the name of your dataset called "abc", you need to put all images into datasets/abc/temp. Then, create two empty directories named as train and test which contain an empty train.csv or test.csv respectively. Remember all the image names should such format, img_0001.jpg. The index must have length in 4.
 
 There are several parameters you may need to change in shuffle_data.py which are lines 7-18. There are related to your datasets file path and data set distributions.
 
