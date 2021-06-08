@@ -1,5 +1,7 @@
 import csv
 
+print("Please prepare a clean train_new.csv")
+
 with open('datasets/IC_Stairs/train/train.csv',mode='r') as csvfile:
     rows = csv.reader(csvfile)
     for row in rows:
