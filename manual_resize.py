@@ -1,5 +1,8 @@
 import cv2
 import csv
+"""
+This scipts helps to resize all the images from test_original or train_original to test and train.
+"""
 
 with open('datasets/IC_Stairs/test/test.csv',mode='r') as csvfile:
     rows = csv.reader(csvfile)

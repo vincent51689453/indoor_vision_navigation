@@ -1,3 +1,7 @@
+"""
+This script can help to adjust the csv labels when a range of image is known
+"""
+
 import csv
 
 print("Please prepare a clean train_new.csv")

@@ -25,7 +25,7 @@ class CNN(nn.Module):
         x = self.pool(F.relu(self.conv2(x)))
         x = torch.flatten(x, 1)
         # shape can help to check tensor dimensions
-        #print(x.shape) 
+        # print(x.shape) 
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
         x = self.fc3(x)
