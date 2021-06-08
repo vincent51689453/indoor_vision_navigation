@@ -11,4 +11,4 @@ num_epoches = 20
 
 # Network parameters
 input_channel = 3   # RGB Image 
-output_channel = 10 # Number of categories
+output_channel = 4  # Number of categories
