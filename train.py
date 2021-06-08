@@ -25,15 +25,15 @@ train_loader = DataLoader(training_set, batch_size=config.param_batch_size, shuf
 test_loader = DataLoader(testing_set,batch_size=config.param_batch_size,shuffle=True)
 
 # Create a CNN
-trail_net = network.CNN(config.input_channel,config.output_channel)
+navigation_net = network.CNN(config.input_channel,config.output_channel)
 
 # CUDA support
 if torch.cuda.is_available():       
-    trail_net = trail_net.cuda()       
+    navigation_net = navigation_net.cuda()       
 
 # Define Loss and Optimization 
 criterion = nn.CrossEntropyLoss()
-optimizer = optim.Adam(trail_net.parameters(), lr=config.param_learning_rate)
+optimizer = optim.Adam(navigation_net.parameters(), lr=config.param_learning_rate)
 
 # Start Training
 for epoch in range(config.num_epoches):
@@ -57,7 +57,7 @@ for epoch in range(config.num_epoches):
 
         # Network IN/OUT
         img = img.float()
-        output = trail_net(img)
+        output = navigation_net(img)
 
         # Loss evaluations
         loss = criterion(output,label)
@@ -75,3 +75,6 @@ for epoch in range(config.num_epoches):
 
         print('Finish {} epoch,Loss:{:.6f},Acc:{:.6f}'.format(epoch+1,running_loss/(size_training_set),\
             running_acc/size_training_set))
+
+    # Testing at each epoch
+
