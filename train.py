@@ -43,7 +43,7 @@ for epoch in range(config.num_epoches):
     running_loss = 0.0
     running_acc = 0.0
 
-    # Training
+    # Training at each epoch
     for i,data in enumerate(train_loader,1):
         img,label = data
 
