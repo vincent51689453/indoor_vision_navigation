@@ -38,6 +38,14 @@ if torch.cuda.is_available():
 criterion = nn.CrossEntropyLoss()
 optimizer = optim.Adam(navigation_net.parameters(), lr=config.param_learning_rate)
 
+# Training Loss and Acc
+train_loss_list = []
+train_acc_list = []
+
+# Test Loss and Acc
+test_loss_list = []
+test_acc_list = []
+
 # Start Training
 for epoch in range(config.num_epoches):
     print('epoch{}'.format(epoch+1))
@@ -63,28 +71,37 @@ for epoch in range(config.num_epoches):
         # Network IN/OUT
         img = img.float()
         output = navigation_net(img)
+
         # Loss evaluations
         loss = criterion(output,label)
-        running_loss += loss.item() * label.size(0)
-        _, pred = torch.max(output,1)
-        num_correct = (pred == label).sum()
-        accuracy = (pred == label).float().mean()
-        running_acc += num_correct.item()
+        train_loss_list.append(loss.item())
 
+        # Batch size
+        total_sample_in_batch = label.size(0)
+
+        # Getting the largetst P(x)
+        _,predicted = torch.max(output.data,1)
+
+        # Calculate number of matched labels, .item() convert the tensor to integer
+        correct = (predicted == label).sum().item()
+        train_acc_list.append(correct/total_sample_in_batch)
+
+        # Make gradients parameters become zero
         optimizer.zero_grad()
+
+        # Back propagation + optimization
         loss.backward()
         optimizer.step()
 
-        size_training_set = training_set.__len__()
+        # Print output
+        print("Epoch[{}/{}],Iteration:{},Loss:{:.6f},Accuracy:{:.2f}%".format(          \
+            epoch+1,config.num_epoches,i,loss.item(),((correct/total_sample_in_batch)*100)\
+        ))
 
-        scalar_loss = running_loss/size_training_set
-        scalar_accuracy = running_acc/size_training_set
-
-        print('Finish {} epoch,Loss:{:.6f},Acc:{:.6f}'.format(epoch+1,scalar_loss,scalar_accuracy))
-        # Write to tensorboard
-        writer.add_scalar('Train/Loss',scalar_loss,epoch)
-        writer.add_scalar('Train/Accuracy',scalar_accuracy,epoch)
-        writer.flush()
+    # Write to tensorboard
+    writer.add_scalar('Train/Loss',loss.item(),epoch)
+    writer.add_scalar('Train/Accuracy',((correct/total_sample_in_batch)*100),epoch)
+    writer.flush()
 
 
     # Testing at each epoch
@@ -113,18 +130,33 @@ for epoch in range(config.num_epoches):
         output = navigation_net(img)
         loss = criterion(output,label)
 
-        eval_loss += loss.item()*label.size(0)
-        _, pred = torch.max(output,1)
-        num_correct = (pred == label).sum()
-        accuracy = (pred == label).float().mean()
-        eval_acc += num_correct.item()
+        # Loss evaluations
+        loss = criterion(output,label)
+        test_loss_list.append(loss.item())
 
-        size_testing_set = testing_set.__len__()
-        scalar_loss = eval_loss/size_testing_set
-        scalar_accuracy = eval_acc/size_testing_set
+        # Batch size
+        total_sample_in_batch = label.size(0)
 
-        print('Test Loss: {:.6f}, Acc: {:.6f}\r\n'.format(scalar_loss,scalar_accuracy))
-        # Write to tensorboard
-        writer.add_scalar('Test/Loss',scalar_loss,epoch)
-        writer.add_scalar('Test/Accuracy',scalar_accuracy,epoch)
-        writer.flush()
+        # Getting the largetst P(x)
+        _,predicted = torch.max(output.data,1)
+
+        # Calculate number of matched labels, .item() convert the tensor to integer
+        correct = (predicted == label).sum().item()
+        test_acc_list.append(correct/total_sample_in_batch)
+
+        # Make gradients parameters become zero
+        optimizer.zero_grad()
+
+        # Back propagation + optimization
+        loss.backward()
+        optimizer.step()
+
+        # Print output
+        print("Epoch[{}/{}],Iteration:{},Loss:{:.6f},Accuracy:{:.2f}%".format(          \
+            epoch+1,config.num_epoches,i,loss.item(),((correct/total_sample_in_batch)*100)\
+        ))
+
+    # Write to tensorboard
+    writer.add_scalar('Test/Loss',loss.item(),epoch)
+    writer.add_scalar('Test/Accuracy',((correct/total_sample_in_batch)*100),epoch)
+    writer.flush()

@@ -28,5 +28,6 @@ class CNN(nn.Module):
         # print(x.shape) 
         x = F.relu(self.fc1(x))
         x = F.relu(self.fc2(x))
+        # Loss function contain entropy and softmax already, no activation function is needed
         x = self.fc3(x)
         return x
