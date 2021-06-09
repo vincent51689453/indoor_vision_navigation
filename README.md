@@ -18,14 +18,12 @@ python3 shuffle_data.py
 
 ## Network Output
 
-Class 0: Forward
-
-Class 1: Turn Left
-
-Class 2: Turn Right
-
-Class 3: Stop
-
+| Labels | Directions |
+| ------ | ---------- |
+| 0      | Forward    |
+| 1      | Left       |
+| 2      | Right      |
+| 3      | Stop       |
 
 ## Tensorboard
 ```
