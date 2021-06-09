@@ -14,7 +14,20 @@ python3 shuffle_data.py
 
 ![image](https://github.com/vincent51689453/indoor_vision_navigation/blob/main/git_image/data_shuffle.png)
 
+if you need to resize all the image in the dataset, you can run and edit
+```
+python3 manual_resize.py
+```
+
 **However, you need to modify the csv file manually to label each image in the current stage. You may modify manual_label.py if it is useful for you.**
+
+## Tensorboard
+```
+tensorboard --logdir log/
+```
+You can access tensorboard by \<ip_address\>:6006 .
+
+![image](https://github.com/vincent51689453/indoor_vision_navigation/blob/main/git_image/tensorboard.png)
 
 ## Network Output
 
@@ -25,8 +38,4 @@ python3 shuffle_data.py
 | 2      | Right      |
 | 3      | Stop       |
 
-## Tensorboard
-```
-tensorboard --logdir log/
-```
-You can access tensorboard by \<ip_address\>:6006 .
+![image](https://github.com/vincent51689453/indoor_vision_navigation/blob/main/git_image/navigation_net_v1.gif)
