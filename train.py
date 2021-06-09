@@ -51,12 +51,14 @@ for epoch in range(config.num_epoches):
     print('epoch{}'.format(epoch+1))
     print('*'*10)
 
+    iteration = 0
     running_loss = 0.0
     running_acc = 0.0
 
     # Training at each epoch
     for i,data in enumerate(train_loader,1):
         img,label = data
+
         #Normalization
         img = img/255
 
@@ -94,7 +96,7 @@ for epoch in range(config.num_epoches):
         optimizer.step()
 
         # Print output
-        print("Epoch[{}/{}],Iteration:{},Loss:{:.6f},Accuracy:{:.2f}%".format(          \
+        print("Training -> Epoch[{}/{}],Iteration:{},Loss:{:.6f},Accuracy:{:.2f}%".format(          \
             epoch+1,config.num_epoches,i,loss.item(),((correct/total_sample_in_batch)*100)\
         ))
 
@@ -152,7 +154,7 @@ for epoch in range(config.num_epoches):
         optimizer.step()
 
         # Print output
-        print("Epoch[{}/{}],Iteration:{},Loss:{:.6f},Accuracy:{:.2f}%".format(          \
+        print("Testing -> Epoch[{}/{}],Iteration:{},Loss:{:.6f},Accuracy:{:.2f}%".format(          \
             epoch+1,config.num_epoches,i,loss.item(),((correct/total_sample_in_batch)*100)\
         ))
 
@@ -160,3 +162,7 @@ for epoch in range(config.num_epoches):
     writer.add_scalar('Test/Loss',loss.item(),epoch)
     writer.add_scalar('Test/Accuracy',((correct/total_sample_in_batch)*100),epoch)
     writer.flush()
+
+# Save checkpoint
+torch.save(navigation_net,'models/nevigation_net.pt')
+print("Training is over")
