@@ -38,4 +38,9 @@ You can access tensorboard by \<ip_address\>:6006 .
 | 2      | Right      |
 | 3      | Stop       |
 
+## Network deployment
+After modifying the input source of inference.py and network path, you can run
+```
+python3 inference.py
+```
 ![image](https://github.com/vincent51689453/indoor_vision_navigation/blob/main/git_image/navigation_net_v1.gif)
