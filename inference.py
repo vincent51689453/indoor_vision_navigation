@@ -5,12 +5,15 @@ from torchvision import transforms
 from torchvision.io import read_image
 from torch.autograd import Variable
 
+# Name of model (please confirm)
+model_name = 'navigation_net_v1'
+
 # Video source
 video_input_path = 'datasets/IC_Stairs/ic_stairs.mp4'
 capture = cv2.VideoCapture(video_input_path)
 
 # Load network with CUDA support
-network_save_path = 'models/navigation_net.pt'
+network_save_path = 'models/' + model_name +'.pt'
 navigation_CNN = torch.load(network_save_path)
 print(navigation_CNN)
 if torch.cuda.is_available():       
@@ -36,7 +39,7 @@ while (capture.isOpened()):
     direction = navigation_CNN(image_tensor)
     _,predicted = torch.max(direction.data,1)
     direction_label = predicted.item()
-
+    print("Direction label:",direction_label)
     # Draw Pointer
     # Label 0: Forward
     if(direction_label == 0):
@@ -47,6 +50,13 @@ while (capture.isOpened()):
         frame = cv2.arrowedLine(frame,(start_pt_x,start_pt_y),(end_pt_x,end_pt_y),(255,0,255),5)
     # Label 1: Left
     if(direction_label == 1):
+        start_pt_x = int(720/2+60)
+        start_pt_y = int(480/2)
+        end_pt_x = int(720/2-60)
+        end_pt_y = start_pt_y
+        frame = cv2.arrowedLine(frame,(start_pt_x,start_pt_y),(end_pt_x,end_pt_y),(255,0,255),5)
+    # Label 2: Left
+    if(direction_label == 2):
         start_pt_x = int(720/2-60)
         start_pt_y = int(480/2)
         end_pt_x = int(720/2+60)

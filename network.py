@@ -16,14 +16,14 @@ class CNN(nn.Module):
         self.conv2 = nn.Conv2d(6, 16, 5)
         self.pool = nn.MaxPool2d(2, 2)
 
-        self.fc1 = nn.Linear(331344, 120)
+        self.fc1 = nn.Linear(331344, 120)        
         self.fc2 = nn.Linear(120, 84)
         self.fc3 = nn.Linear(84, n_class)
 
     def forward(self, x):
         x = self.pool(F.relu(self.conv1(x)))
         x = self.pool(F.relu(self.conv2(x)))
-        x = torch.flatten(x, 1)
+        x = torch.flatten(x,1)
         # shape can help to check tensor dimensions
         # print(x.shape) 
         x = F.relu(self.fc1(x))
