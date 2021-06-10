@@ -6,7 +6,7 @@ Assuem the name of your dataset called "abc", you need to put all images into da
 
 There are several parameters you may need to change in shuffle_data.py which are lines 7-18. There are related to your datasets file path and data set distributions.
 
-After all the parameters are ready, you may simply execute the following.
+After all the parameters are ready, you may simply execute the following to prepare the dataset.
 
 ```
 python3 shuffle_data.py
@@ -20,6 +20,11 @@ python3 manual_resize.py
 ```
 
 **However, you need to modify the csv file manually to label each image in the current stage. You may modify manual_label.py if it is useful for you.**
+
+When the dataset is ready, you can execute the following to start training.
+```
+python3 train.py
+```
 
 ## Tensorboard
 ```
